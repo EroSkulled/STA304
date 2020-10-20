@@ -231,8 +231,11 @@ Next time we may also consider a different model to predict the data. For exampl
 ## References
 
 Johnson, G. (2019, June 17). Do you live in Canada's happiest province? The Globe and Mail. Retrieved October 18, 2020, from https://www.theglobeandmail.com/life/article-do-you-live-in-canadas-happiest-province/
+
 Life Satisfaction.  (2017, April). The Conference Board of Canada. Retrieved October 18, 2020, from https://www.conferenceboard.ca/hcp/provincial/society/life-satisfaction.aspx?AspxAutoDetectCookieSupport=1
+
 Pappas, S. (2015, November 12). Teens Are Happier Than in the Past - Why Are Adults So Miserable? Lives Science. Retrieved October 18, 2020, from https://www.livescience.com/52771-why-teens-are-happy-adults-miserable.html
+
 Welsh, J. (2011, April 19). Happiness Is U-Shaped: It Drops in Middle Age, Rises Later. Lives Science. Retrieved October 18, 2020, from https://www.livescience.com/13788-happiness-lifetime.html
 
 Leong, M. (2019, January 14). If money doesn't buy happiness, why are we so obsessed with getting more of it? Financial Post. Retrieved October 18, 2020, from https://financialpost.com/personal-finance/material-things-dont-define-happiness-so-why-are-we-obsessed-with-money
@@ -241,12 +244,8 @@ Leong, M. (2019, January 14). If money doesn't buy happiness, why are we so obse
 T. Lumley (2020) "survey: analysis of complex survey samples". R package version 4.0.
 
 
-Long JA (2020). _jtools: Analysis and Presentation of Social Scientific
-Data_. R package version 2.1.0, <URL:
-https://cran.r-project.org/package=jtools>.
+Long JA (2020). _jtools: Analysis and Presentation of Social Scientific Data_. R package version 2.1.0, https://cran.r-project.org/package=jtools
 
 
-Hao Zhu (2020). kableExtra: Construct Complex Table with 'kable' and
-Pipe Syntax. R package version 1.2.1.
-https://CRAN.R-project.org/package=kableExtra
+Hao Zhu (2020). kableExtra: Construct Complex Table with 'kable' and Pipe Syntax. R package version 1.2.1. https://CRAN.R-project.org/package=kableExtra
 

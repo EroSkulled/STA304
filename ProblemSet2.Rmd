@@ -27,7 +27,8 @@ Code and data can be accessed via github at https://github.com/EroSkulled/STA304
 
 ## Abstract
 
-We use multiple linear regression technique to analyze the impact of personal income, age and regional difference on self-rated feeling of life. We made the hypothesis that the younger and higher income the respondent has, the higher they will respond on the feeling of life number scale and people from major cities will generally has a more satisfied life. However we conclude that our model gives a prediction that people with a higher age will slightly has a lower satisfaction of life and only those with the lowest annual income(less than $25k) would have a negative impact on their feeling of life. The regional difference is also only seen in three provinces.
+We use the multiple linear regression technique to analyze the impact of personal income, age and regional difference on self-rated feeling of life. We make the hypothesis that the younger and higher income the respondents have, the higher they will respond on the feeling of life number scale and people from major cities will generally have a more satisfied life. However, our model gives a prediction that people with higher ages will slightly have a lower satisfaction of life and only those with the lowest annual income(less than $25k) would have a negative impact on their feelings of life. The impact from regional differences is only seen in three provinces.
+
 
 ## Introduction
 

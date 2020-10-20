@@ -38,10 +38,12 @@ A multiple regression model would be used to analyze their relationship since th
 
 In the Result and Discussion sections,results from the model will be presented and interpreted. In addition, a conclusion will be drawn based on analysis from the data and model.
 
+The last part of this analysis consists of weakness of the model and data, and next steps, suggests what subsequent and potential work can be done for improvement.
+
 
 ## Data
 
-Data we used are self-rated feelings of life, province, age and income. For age, we are interested in young adults that are below 35. And they are obtained from: 2017 General Social Survey: Families Cycle 31 from Statistic Canada. Method used to carry out the survey consists of 2 steps, first, a stratification of 27 strata was performed based on geographic area1. Then, a simple random sample without replacement of records was performed within each strata. So a stratified random sampling was used. Stratified random sampling is a probability sampling technique that slices population into homogeneous groups, then random sampling of each strata is used.  
+The data we used are self-rated feelings of life, province, age and income. For age, we are interested in young adults that are below 35 and they are obtained from: 2017 General Social Survey: Families Cycle 31 from Statistic Canada, see reference. Method used to carry out the survey consists of 2 steps, first, a stratification of 27 strata was performed based on geographic area1. Then, a simple random sample without replacement of records was performed within each strata. So a stratified random sampling was used. Stratified random sampling is a probability sampling technique that slices population into homogeneous groups, then random sampling of each strata is used.  
 
 Advantage of performing a stratified random sampling is quite clear. Stratified steps ensure minimizing sample selection bias and decreasing difficulty accessing full lists of population. Those are 2 disadvantages of simple random sampling on its own. And simple random sampling within each strata still provides a simple approach that lacks bias within each strata. Some cons are notable as well. For example, to perform such sampling, retrieving frames and deciding how stratified steps work can be very capital and time consuming. How to slice population strata is another difficulty that requires professional analysis. Statistic Canada needs to deploy quantitative specialists to finish those steps. 
 
@@ -75,7 +77,7 @@ For income, besides standard non-response options, it is categorical with an int
 
 Method used to carry out the survey consists of 2 steps, first, a stratification of 27 strata was performed based on geographic area1. Then, a simple random sample without replacement of records was performed within each strata. So a stratified random sampling was used.
 
-The population of this survey includes all people that are older than 15 years old, but excludes residents of the Yukon, Northwest Territories and Nunavut and excludes full-time residents of institutions. The survey frame consists of 2 components. First is lists of telephone numbers (both landline and cellular)  available to Statistics Canada, then, the Address Register which is all dwellings within the 10 provinces. Sample were respondents who were randomly selected from each eligible 2 household and accepted the survey. Target sample size is 20000 and 20602 samples were obtained. 
+The population of this survey includes all people that are older than 15 years old, but excludes residents of the Yukon, Northwest Territories and Nunavut and excludes full-time residents of institutions. The survey frame consists of 2 components. First is lists of telephone numbers (both landline and cellular)  available to Statistics Canada, then, the Address Register which is all dwellings within the 10 provinces. Sample were respondents who were randomly selected from each eligible household and accepted the survey. Target sample size is 20000 and 20602 samples were obtained. 
 
 
 ## Model

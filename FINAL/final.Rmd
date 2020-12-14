@@ -1,0 +1,210 @@
+---
+title: Analysis of 2019 Canada General Election using Logistic Regression and Post-Stratification
+  to identify the difference if 'everyone' voted
+author: "YUEHAO HUANG"
+date: "07/12/2020"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+abstract: In this paper I am going to build a logistic regression model based on the
+  CES and a post-stratification dataset to identify how the 2019 Canadian Federal
+  Election would have been different if ‘everyone’ had voted. The data are gathered
+  from CESR2019 package. My hypothesis is that the if everyone voted, Justin Trudaue
+  wont be able to continue be the PM of Canada anymore. I used Post-stratification
+  method based on provinces and then used logistic regression to create the model.
+  The model predicted that the Liberals will have less[not complete yet] votes.
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(cesR)
+library(ggplot2)
+library(tidyverse)
+library(skimr)
+library(kableExtra)
+survey_data <- read_csv("survey_data1.csv")
+plot_data <- read_csv("plot_data1.csv")
+census_data <- read_csv("census_data.csv")
+```
+### Note
+Code and data can be accessed via github at https://github.com/EroSkulled/STA304/ , licensed under MIT.
+
+
+# Keywords
+- 2019 Canada General Election Study
+- 2019 Canadian Election Result
+- Voters
+- Post-Stratification
+- Observational study
+- Liberal Party
+
+# Background
+In this study we will build a logistic regression model based on the CES and a post-stratification dataset to identify how the 2019 Canadian Federal Election would have been different if ‘everyone’ had voted.
+
+# Introduction
+The 2019 Canadian election was a close one for our Prime Minister Justin Trudeau to continue serve this country. From the CES2019 data set, we we could knock out an interesting question: what if everyone in Canada who is eligible to vote, voted? Will there be any differences? Throughout Canada long history, the CES has been a rich source of observational data on Canadians' political behavior and attitudes,as observational data is often more reliable. 
+
+In this study, the outcome(dependent) variable is whether people will vote for the liberal party. The treatment(Independent) variable is the gender of people. The province they currently live in will be used as strata for us to do post stratification process on the data.
+
+A stratified dataset will be used to investigate how different people tend to vote differently based on different provinces they are from and which gender they are to make conclusion on the impact to the result of the election. In the Methodology section, I describe the study data and model that was used to perform the logistic regression analysis.Results of the MRP model analysis are provided in the Results section, and inferences of this data along with conclusions are presented in the conclusion section. Further development including but not limit to the improvements and Next steps are written in the second part of the dissuasion section.
+
+# Methodology
+## Data
+The data is from 2019 Canadian election study - web survey. See reference section for authors and links to the data. This dataset used a weight system to to ensure that the data is representative of the population. This data consists of two sections: one before the election, named CPS, and one after, named PES. Among them there are 33905 high quality entries in CPS and 8313 high quality entries in PES. We will only use those entries for high accuracy results. Note above named entries have excluded those whose province and postal code did not match or having other issues. For the post-stratification dataset, Government of Canada post newest census data on Canada.ca and accessible via https://www.statcan.gc.ca/
+
+Note Canada is not a direct democracy system[^1], the vote here only indicates the popularity a party have, or popular vote.
+
+
+
+
+[^1]: See how democracy in Canada works posted on Canada.ca: https://www.canada.ca/en/democratic-institutions/services/democracy-canada.html.
+
+Plot.1
+```{r plot1, echo = FALSE}
+##weighted proportional plot
+
+plot_data%>%
+  ggplot(aes(y = pes19_province, x = prop, fill = cps19_votechoice)) +
+  geom_col() + 
+  theme(legend.position = "bottom") + 
+  labs(y = "Provinces", 
+       x = "Weighted Proportion",
+       title = "Eligible voted choices in 2019 \nacross different provinces in Canada") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+Plot.2
+```{r plot2, echo = FALSE}
+## weighted real count plot
+
+plot_data%>%
+  ggplot(aes(y = pes19_province, x = n, fill = cps19_votechoice)) +
+  geom_col() + 
+  theme(legend.position = "bottom") + 
+  labs(y = "Provinces", 
+       x = "Weighted Count", 
+       title = "Eligible voted choices in 2019 \nacross different provinces in Canada") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+```
+
+Above is a proportional plot showing the proportion of how each provinces voted for and an actual weighted vote count plot. Those results are already weighted[^2]There are 5483 results with no empty response or response with "Do not want to disclose" option. While Liberal Party and Conservative party are competing each other for the seats, Liberals has some advantage all over conservative party except for Alberta province where conservative party has a significant lead. 
+
+We are interested in predicting the popular vote outcome of the 2019 Canadian Federal Election using Population Census data from Canada.ca (For citation please see reference). To do this we are employing a post-stratification technique. In the following section(s) I will describe the data and model specifics as well as the post-stratification calculation.
+
+[^2]: This dataset used a weight system to to ensure that the data is representative of the population.
+
+
+For this data I created a new vote_Liberal variable(cleaned from variable cps19_votechoice), containing only 1 and 0 indicating whether people will vote for the liberals or not, to be our response variable. Then use gender(cleaned from variable cps19_province)  as the treatment variable. At last, we will perform post-stratification on the census data set based on province to better predict the result.
+
+Some preview of the data structure is listed in the following table:
+
+Table.1
+```{r datas, echo = FALSE}
+kable(head(survey_data))
+```
+
+
+# Model
+
+
+```{r model, echo = FALSE}
+model <- glm(vote_Liberal ~ gender + income,
+             data = survey_data, 
+             family = binomial())
+
+model1 <- glm(vote_Liberal ~ gender,
+             data = survey_data, 
+             family = binomial())
+
+```
+We will be using a logistic regression model to model the proportion of Canadians who will vote for the Liberal Party in 2019 The reason we use this model is because we are interested in whether The liberals will be elected to be the ruling party by ALL Canadians in 2019, by cleaning the data and adding a variable with response only containing 1 and 0, indicating whether people will vote for Liberals Party or not, it is perfect to use logistic regression with binomial family for our prediction.  Our model has one predictor. It is: gender[^3]. which is recorded as a categorical variable, to model the probability of people voting for Liberal Party or not. The logistic regression model we are using is:
+
+[^3]: Note here gender relates to a physical condition of human to determine one's sex. We only use male and female here because on the official Canadian CENSUS, there is only two gender, Male and Female. For more information on gender please see the following paper from stanford:  https://web.stanford.edu/~eckert/PDF/Chap1.pdf
+
+$$ y = \beta_0+ \beta_1  x_{male} +\epsilon$$
+Where $\beta_0 = -0.47668$ , $\beta_1 = -0.2133664$, and $\epsilon$ is the error term.
+
+$y$ represents the log proportion value of people who will vote for Liberals vs. against them $\beta_0$ represents the intercept of the model, meaning the probability of a female would have a log value of -0.47668 for in the log proportion possibility value of voting for the Liberals against voting for some other party. Additionally, $\beta_1$,represents the slope of the model for male. For example, for any male, we would expect a $0.5382$ increase in the log proportional probability value. Finally, $\beta_2$ is the slope for unemployed people. For instance, Male would have a $-0.2133664$ change in numbers in the log proportional probability (Please see next section(s) for details).
+# Results
+
+The model I used is listed in the following table:
+Table.2
+```{r , echo = FALSE}
+kable(broom::tidy(model1))
+```
+
+As we can see we have a very small p-value meaning gender is very significant to our model.
+
+Note before this model I also included income as an variable but the model summary indicates income variable is not significant(see Table.3) so i removed it and only have gender as the only variable in this logistic regression model.
+
+Table.3
+```{r, echo = FALSE}
+kable(broom::tidy(model))
+```
+
+
+Next I will explain the meaning of result I got after applying post-sttratification.
+```{r post-stratification, echo = FALSE}
+
+census_data$estimate <-
+  model1 %>%
+  predict(newdata = census_data)
+census_data %>%
+  mutate(lib_predict_prop = estimate*n) %>%
+  summarise(lib_predict = sum(lib_predict_prop)/sum(n))
+
+
+```
+
+We estimate that the log proportion of voters in favor of voting for the Liberal Party and against them to be -0.5827 after applying post stratification. Then we take exponential on both sides since it is a log proportion, what we have is 0.5583 for the proportion of vote for vs. against the liberals. For example, Say there are 156 people, about 56 people would vote for the liberals and 100 would not. Hence we can interpret the percentage of people who would vote for the liberals based on the post stratification data will be 56/156 = 0.358, meaning About 35.8% of people would vote for the Liberal Party, which accounted for genders and using provinces as strata, modeled by the Logistic regression model. 
+
+
+#Discussion
+## Summary
+In order to predict the outcome of the 2019 Canadian Federal Election, the logistic regression model is used to predict whether the liberals will be able to retain their position. So our response variable will be whether people will vote for Trump, using dummy variable 1 as vote for the liberals and 0 otherwise. For explanatory variables, only gender is used and as shown in Table.1, Gender is a very significant variable in our model. After the regression model is built, we use post-stratification to partition the data into different cells based on provinces. We may obtain our expected outcome for each cell. Weight each cell by its relative proportion to population and sum them up to get the estimate for the entire data. 
+
+
+## Conclusion
+
+By using the logistic regression model here, meaning the model will give us a log ratio of $log(p/{1-p})$ on how people would vote for and against Trump in this 2020 election instead of the percentage of people voting for Trump. However, some calculation would be more tha enought to get this value, simply do exponential on both sides and solve for the unknown probability p, which will give us the percentage of people voting for the liberals (by prediction), which here is 35.8%. 
+
+
+By utilizing post-stratification, we predict that there will be about 2.7% more people choose to vote for the liberals during the past 2019 election if we have all Canadians voted.Our model prediction would a step further solidify the win of the liberals.
+
+
+
+## Weakness & Nextstep
+
+
+
+
+
+# References
+Canadian Census Data from statistic website of the Government of Canada <https://www.statcan.gc.ca/>
+
+RStudio Team (2020). RStudio: Integrated Development for R. RStudio, PBC, Boston, MA URL <http://www.rstudio.com/>.
+
+Wickham H (2016). ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York. ISBN 978-3-319-24277-4, <https://ggplot2.tidyverse.org>.
+
+Stephenson, Laura B; Harell, Allison; Rubenson, Daniel; Loewen, Peter John, 2020, “2019 Canadian Election Study - Online Survey”, <https://doi.org/10.7910/DVN/DUS88V>, Harvard Dataverse, V1
+
+
+Wu C., Thompson M.E. (2020) Basic Concepts in Survey Sampling. In: Sampling Theory and Practice. ICSA Book Series in Statistics. Springer, Cham. <https://doi.org/10.1007/978-3-030-44246-0_1>
+
+Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686,
+<https://doi.org/10.21105/joss.01686>
+
+Elin Waring, Michael Quinn, Amelia McNamara, Eduardo Arino de la
+  Rubia, Hao Zhu and Shannon Ellis (2020). skimr: Compact and Flexible
+  Summaries of Data. R package version 2.1.2.
+  <https://CRAN.R-project.org/package=skimr>
+
+Hao Zhu (2020). kableExtra: Construct Complex Table with 'kable' and
+  Pipe Syntax. R package version 1.3.1.
+  <https://CRAN.R-project.org/package=kableExtra>

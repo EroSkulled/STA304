@@ -62,6 +62,8 @@ pre_data$gender <- dat1$cps19_gender
 pre_data$income <- dat1$cps19_income_number
 pre_data$vote_Liberal = 0
 pre_data$vote_Liberal[pre_data$cps19_votechoice == "Liberal Party"] <- 1
+pre_data$vote_Conservative = 0
+pre_data$vote_Conservative[pre_data$cps19_votechoice == "Conservative Party"] <- 1
 pre_data<- pre_data%>%
   filter(gender != "Other")%>%
   select(-c(1:5))

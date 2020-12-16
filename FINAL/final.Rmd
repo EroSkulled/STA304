@@ -34,7 +34,7 @@ plot_data <- read_csv("plot_data1.csv")
 census_data <- read_csv("census_data.csv")
 ```
 ### Note
-Code and data can be accessed via github at https://github.com/EroSkulled/STA304/tree/main/FINAL , licensed under MIT.
+Code and data can be accessed via github at <https://github.com/EroSkulled/STA304/tree/main/FINAL>, licensed under MIT.
 
 
 # Keywords
@@ -70,7 +70,6 @@ Note Canada is not a direct democracy system[^1], due to the first-past-the-post
 
 [^1]: See how democracy in Canada works posted on Canada.ca: https://www.canada.ca/en/democratic-institutions/services/democracy-canada.html.
 
-Plot.1
 ```{r plot1, echo = FALSE}
 ##weighted proportional plot
 
@@ -81,11 +80,16 @@ plot_data%>%
   labs(y = "Provinces", 
        x = "Weighted Proportion",
        title = "Eligible voted choices in 2019 \nacross different provinces in Canada") +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(legend.text=element_text(size=7)) + 
+  scale_fill_discrete(name = "Vote \nfor")
 ```
+Plot.1
+
+Plot.1 Above is a proportional plot showing the make up percentage for each party people would vote for in each province. This indicates how the votes are distributed in each province. It is clear that conservatives and Liberals are two main rivals on the stage and has significant differences based on provinces.
 
 
-Plot.2
+
 ```{r plot2, echo = FALSE}
 ## weighted real count plot
 
@@ -96,12 +100,17 @@ plot_data%>%
   labs(y = "Provinces", 
        x = "Weighted Count", 
        title = "Eligible voted choices in 2019 \nacross different provinces in Canada") +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(legend.text=element_text(size=7)) + 
+  scale_fill_discrete(name = "Vote \nfor")
 
 
 ```
+Plot.2
 
-Above is a proportional plot showing the proportion of how each provinces voted for and an actual weighted vote count plot. Those results are already weighted[^2]There are 5483 results with no empty response or response with "Do not want to disclose" option. While Liberal Party and Conservative party are competing each other for the seats, Liberals has some advantage all over conservative party except for Alberta province where conservative party has a significant lead. 
+Plot.2 is a weighted vote count plot. This indicates where most of the votes are from in this survey. It is clear that from province to province there is a significant difference on the number of votes as well. However, the post-stratification method will be able to solve those bias problems later. 
+
+Note the data in both plots are already weighted[^2]. Both plots have the same number of results of 5483 with no empty response or response with "Do not want to disclose" option. While Liberal Party and Conservative party are competing each other for the seats, Liberals has some advantage all over conservative party except for Alberta province where conservative party has a significant lead. 
 
 We are interested in predicting the popular vote outcome of the 2019 Canadian Federal Election using Population Census data from Canada.ca (For citation please see reference). To do this we are employing a post-stratification technique. In the following section(s) I will describe the data and model specifics as well as the post-stratification calculation.
 
@@ -112,11 +121,11 @@ For this data I created new vote_Liberal and vote_Conservative variables(cleaned
 
 Some preview of the data structure is listed in the following table:
 
-Table.1
+
 ```{r datas, echo = FALSE}
 kable(head(survey_data))
 ```
-
+Table.1
 
 # Model
 
@@ -179,26 +188,28 @@ As we can see we have a very small p-value meaning gender is very significant to
 
 
 Next I will explain the meaning of result I got after applying post-sttratification.
+
+Table.5
 ```{r post-stratification, echo = FALSE}
 
 census_data$estimate <-
   model1 %>%
   predict(newdata = census_data)
-census_data %>%
+kable(census_data %>%
   mutate(lib_predict_prop = estimate*n) %>%
-  summarise(lib_predict = sum(lib_predict_prop)/sum(n))
+  summarise(lib_predict = sum(lib_predict_prop)/sum(n)))
 
 census_data$estimate <-
   model2 %>%
   predict(newdata = census_data)
-census_data %>%
+kable(census_data %>%
   mutate(con_predict_prop = estimate*n) %>%
-  summarise(con_predict = sum(con_predict_prop)/sum(n))
+  summarise(con_predict = sum(con_predict_prop)/sum(n)))
 
 ```
 By using the logistic regression model here, meaning the model will give us a log ratio of $log(p/{1-p})$ on what party people would vote for and against them in this 2019 election instead of the percentage of people voting for Liberal or Conservative Party than others. However, some simple calculation would be more than enough to get this value.
 
-Using the result from the Liberal party as an example, we estimate that the log proportion of voters in favor of voting for the Liberal Party and against them to be -0.5827 after applying post stratification. Then we take exponential on both sides since it is a log proportion, what we have is 0.5583 for the proportion of vote for vs. against the liberals. For example, Say there are 156 people, about 56 people would vote for the liberals and 100 would not. Hence we can interpret the percentage of people who would vote for the liberals based on the post stratification data will be 56/156 = 35.8%, meaning about 35.8% of people would vote for the Liberal Party, which accounted for genders and using provinces as strata, modeled by the Logistic regression model. We apply the same calculation to the prediction of conservative party. The model predicted a -0.5905789 log value of the proportion. Hence we get 59/159=35.65%, meaning about 35.65% of people will vote for the Conservative Party.
+Using the result from the Liberal party as an example, we estimate that the log proportion of voters in favor of voting for the Liberal Party and against them to be -0.5827 after applying post stratification as shown in Table.5. Then we take exponential on both sides since it is a log proportion, what we have is 0.5583 for the proportion of vote for vs. against the liberals. For example, Say there are 156 people, about 56 people would vote for the liberals and 100 would not. Hence we can interpret the percentage of people who would vote for the liberals based on the post stratification data will be 56/156 = 35.8%, meaning about 35.8% of people would vote for the Liberal Party, which accounted for genders and using provinces as strata, modeled by the Logistic regression model. We apply the same calculation to the prediction of conservative party. The model predicted a -0.5905789 log value of the proportion as shown in Table.5. Hence we get 59/159=35.65%, meaning about 35.65% of people will vote for the Conservative Party.
 
 
 #Discussion
@@ -210,7 +221,7 @@ In order to predict the outcome of the 2019 Canadian Federal Election, the logis
 
 
 
-We got 35.8% for people would like to vote for liberal party and 35.65% for people tend to vote for conservative party based on the entire population of Canada, after applying the same calculation above. Note historically there are 34.34% of people voted for the conservative party and 33.12% voted for the liberals in 2019. Our model predict that there will be about 2.7% more people choose to vote for the liberals during the past 2019 election if we have all Canadians voted and 1.31% more would choose conservatives party. Hence based on our post-stratification analysis of the proportion of voters in favor of the liberals party and the conservative party modeled by a logistic regression model,we can conclude that the liberals will have a net gain of more votes which will overwhelm the conservatives by 0.15%. 
+We estiamted 35.8% for people would like to vote for liberal party and 35.65% people would tend to vote for conservative party based on the entire population of Canada after applying the same calculation above if all Canadians voted. Note historically there are 34.34% of people voted for the conservative party and 33.12% voted for the liberals in 2019. Our model predict that there will be about 2.7% more people choose to vote for the liberals during the past 2019 election if we have all Canadians voted and 1.31% more would choose conservatives party. Hence based on our post-stratification analysis of the proportion of voters in favor of the liberals party and the conservative party modeled by a logistic regression model,we can conclude that the liberals will overwhelm the conservatives in pupolar vote by 0.15% and would still be the ruling party of Canada. 
 
 
 ## Weakness & Nextstep

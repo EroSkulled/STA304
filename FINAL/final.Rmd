@@ -34,7 +34,7 @@ plot_data <- read_csv("plot_data1.csv")
 census_data <- read_csv("census_data.csv")
 ```
 ### Note
-Code and data can be accessed via github at https://github.com/EroSkulled/STA304/ , licensed under MIT.
+Code and data can be accessed via github at https://github.com/EroSkulled/STA304/tree/main/FINAL , licensed under MIT.
 
 
 # Keywords
